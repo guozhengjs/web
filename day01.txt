@@ -1,0 +1,112 @@
+吴红才 
+=========================================================
+SE:Java核心的类库
+前端页面以及数据库
+第三阶段:web服务器端的编程(Servlet+JSP)
+         ajax(异步的js和xml)
+		 SSM
+===========================================================
+BS(浏览器/服务器)   CS(客户端/服务器)
+1.什么是B/S结构应用
+  客户端采用的是标准的浏览器,服务器端采用的是标准的web服务器,
+  客户端和服务器之间采用的是标准的HTTP协议来进行通讯的.
+  相对于CS,BS的优势
+  1).编程相对简单,不需要编写通讯模块和自定义协议
+  2).不需要用户手动安装,并且后期的版本升级时,也不需要手动更新
+
+2.TOMCAT容器
+  启动: 双击 tomcat/bin/startup.bat文件
+  关闭: 双击 tomcat/bin/shutdown.bat文件
+  访问:localhost:8080
+
+3.什么是servlet ?
+   sun公司制定的一种用于扩展web服务器功能的组件规范
+   扩展web服务器功能?
+   因为在早期的web服务器只能处理静态资源文件,不能处理动态资源文件
+   (需要经过一系列的计算生成的页面) 所以需要扩展(cgi)
+   
+   扩展方式:
+   组件+容器
+   组件:符合规范,实现特定功能的软件模块(Java类 需要程序员编写)
+   容器:符合规范,为组件提供运行环境,并管理组件的生命周期的
+        软件程序
+
+4.使用servlet来编写web应用
+  1).定义Java类,继承HttpServlet
+  2).重写service()
+  3).在web.xml中配置servlet组件
+  
+5.http://localhost:8080/web01/sayHello
+  1).根据ip:端口号来确定访问的服务  127.0.0.1
+  2).根据web01查找webapps目录下对应的文件夹
+  3).根据/sayHello匹配web.xml中的url-pattern
+  4).如果匹配成功,根据servlet-name来查找servlet-class
+  5).tomcat容器利用反射技术实例化servlet组件对象,调用service()
+     来处理请求.
+
+6.servlet中如何正确的输出中文
+  编码格式和解码格式必须保持一致
+  response.setContentType("text/html;charset=utf-8");
+
+7.写一个DataServlet 访问当前时间
+  localhost:8080/web01/date
+  当前系统时间为: 2021/08/02 14:44:00
+  
+8.servlet中如何获取请求参数
+  http://localhost:8080/web01/sayHello?name=张三&city=南京&city=苏州
+  参数名唯一:
+    String : request.getParameter("参数名")
+  参数名不唯一:
+    String[] : request.getParameterValues("参数名")
+  中文参数值乱码如何解决?
+  get请求:无乱码,tomcat8.5已经处理过
+  post请求:会有乱码,因为服务器端默认的解码格式为ISO8859-1
+  获取请求参数之前,设置服务器端的解码格式.
+  request.setCharacterEncoding("utf-8")
+
+9.常见错误
+  1).servlet组件未继承HttpServlet  --> 500
+  2).service方法签名写错 --> 405
+  3).web.xml中<servlet-class>路径写错 --> 500
+  4).web.xml中<servlet>的<servlet-name>和<servlet-mapping>中的
+     <servlet-name>的名字不一致   -->部署出错
+	 url-pattern  /date /test
+  5).访问地址出错 --> 404
+
+10.servlet的运行原理
+  1).浏览器根据IP和端口号与服务器建立连接
+  2).浏览器将数据按照HTTP通讯协议打包
+  3).浏览器向服务器发送请求
+  4).服务器将数据按照HTTP通讯协议拆包,并将拆包之后的数据存放到req
+  5).服务器根据请求地址查找servlet组件,创建servlet组件对象 
+     调用service()
+	 --)通过request来获取请求参数
+	 --)将处理之后的数据写到response
+  6).服务器取出response缓存的数据,按照HTTP协议打包
+  7).服务器发送响应
+  8).浏览器按照http协议拆包 生成新的页面
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
